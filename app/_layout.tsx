@@ -9,15 +9,7 @@ import { useEffect, useState } from 'react'
 import 'react-native-reanimated'
 
 import { useColorScheme } from '@/hooks/useColorScheme'
-import {
-  Button,
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native'
+import { Button, FlatList, StyleSheet, View } from 'react-native'
 import GoalItem from '@/components/GoalItem'
 import GoalInput from '@/components/GoalInput'
 
@@ -30,6 +22,7 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
+  const [modalVisible, setModalVisible] = useState(false)
   const [courseGoals, setCourseGoals] = useState<Array<GoalItem>>([])
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -58,10 +51,22 @@ export default function RootLayout() {
     )
   }
 
+  const startAddGoalHandler = () => {
+    setModalVisible(true)
+  }
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <View style={styles.appContainer}>
-        <GoalInput onPress={addGoalHandler} />
+        <Button
+          title='Add New Goal'
+          color='5e0ecc'
+          onPress={startAddGoalHandler}
+        />
+        <GoalInput
+          visible={modalVisible}
+          onPress={addGoalHandler}
+        />
         <View style={styles.goalsContainer}>
           <FlatList
             data={courseGoals}
