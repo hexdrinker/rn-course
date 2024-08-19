@@ -12,6 +12,7 @@ import { useColorScheme } from '@/hooks/useColorScheme'
 import { Button, FlatList, StyleSheet, View } from 'react-native'
 import GoalItem from '@/components/GoalItem'
 import GoalInput from '@/components/GoalInput'
+import { StatusBar } from 'expo-status-bar'
 
 interface GoalItem {
   text: string
@@ -43,6 +44,7 @@ export default function RootLayout() {
       ...currentCourseGoals,
       { text, id: Math.random().toString() },
     ])
+    endGoalHandler()
   }
 
   const deleteGoalHandler = (id: string) => {
@@ -55,17 +57,23 @@ export default function RootLayout() {
     setModalVisible(true)
   }
 
+  const endGoalHandler = () => {
+    setModalVisible(false)
+  }
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <StatusBar style='light' />
       <View style={styles.appContainer}>
         <Button
           title='Add New Goal'
-          color='5e0ecc'
+          color='#a065ec'
           onPress={startAddGoalHandler}
         />
         <GoalInput
           visible={modalVisible}
           onPress={addGoalHandler}
+          onCancel={endGoalHandler}
         />
         <View style={styles.goalsContainer}>
           <FlatList
@@ -90,6 +98,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 16,
+    backgroundColor: '#1e085a',
   },
   goalsContainer: {
     flex: 5,
